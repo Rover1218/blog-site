@@ -16,7 +16,7 @@ body {
     flex-direction: column;
     /* Enables content and footer alignment */
     font-family: 'Roboto', sans-serif;
-    background: linear-gradient(135deg, #ff7e5f, #feb47b);
+    background-image: url('../images/background.jpg');
     padding: 0 20px;
     color: #333;
 }
@@ -109,9 +109,13 @@ body {
     transform: translateY(-5px);
 }
 
+h2 {
+    color: white;
+}
+
 .post h2 a {
     text-decoration: none;
-    color: #333;
+    color: #ffffff;
     font-weight: bold;
 }
 
