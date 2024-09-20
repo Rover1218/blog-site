@@ -54,7 +54,7 @@ router.get('/create', async (req, res) => {
 
 // Create a new post (handle form submission)
 router.post('/create', async (req, res) => {
-    const { title, content } = req.body;
+    const { title, content, name } = req.body;
     const userEmail = req.session.userEmail; // Get user email from session
 
     if (!title || !content) {
@@ -62,7 +62,7 @@ router.post('/create', async (req, res) => {
     }
 
     try {
-        await Post.create({ title, content, userEmail }); // Include userEmail
+        await Post.create({ title, content, userEmail, name }); // Include userEmail
         res.redirect('/'); // Redirect to homepage after creating the post
     } catch (err) {
         console.error('Error creating post:', err);

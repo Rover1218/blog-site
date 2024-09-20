@@ -5,6 +5,10 @@ const signupBtn = document.getElementById('signupBtn');
 const loginClose = document.getElementById('loginClose');
 const signupClose = document.getElementById('signupClose');
 
+// Get the toggle links for switching between modals
+const openSignupModal = document.getElementById('openSignupModal');
+const openLoginModal = document.getElementById('openLoginModal');
+
 // Function to open a modal
 function openModal(modal) {
     modal.style.display = 'block';
@@ -42,4 +46,16 @@ window.onclick = function (event) {
     } else if (event.target === signupModal) {
         closeModal(signupModal);
     }
+};
+
+// Toggle from login modal to signup modal
+openSignupModal.onclick = function () {
+    closeModal(loginModal); // Close login modal
+    openModal(signupModal); // Open signup modal
+};
+
+// Toggle from signup modal to login modal
+openLoginModal.onclick = function () {
+    closeModal(signupModal); // Close signup modal
+    openModal(loginModal); // Open login modal
 };

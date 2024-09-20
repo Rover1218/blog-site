@@ -5,7 +5,16 @@
     box-sizing: border-box;
 }
 
+html,
 body {
+    height: 100%;
+    /* Ensure the body takes the full height of the viewport */
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    /* Enables content and footer alignment */
     font-family: 'Roboto', sans-serif;
     background: linear-gradient(135deg, #ff7e5f, #feb47b);
     padding: 0 20px;
@@ -19,7 +28,8 @@ body {
     align-items: center;
     background: linear-gradient(135deg, #007BFF, #00d4ff);
     padding: 10px 10px;
-    position: center;
+    position: relative;
+    /* Fixes positioning to avoid content overlap */
     top: 0;
     width: 100%;
     z-index: 999;
@@ -44,6 +54,8 @@ body {
 
 /* Content Container */
 .content-container {
+    flex: 1;
+    /* Makes the container expand and push the footer down */
     margin-top: 100px;
 }
 
@@ -114,13 +126,19 @@ body {
 
 /* Footer */
 footer {
-    margin-top: 40px;
+    background-color: #f1f1f1;
+    padding: 10px 20px;
     text-align: center;
-    color: #888;
-    font-size: 0.9em;
+    width: 100%;
+    font-size: 14px;
+    color: #333;
+    border-top: 1px solid #ddd;
+    position: relative;
+    /* Ensure it stays at the bottom of the content */
+    bottom: 0;
 }
 
-/* Modal styles */
+/* Modal Overlay */
 .modal {
     display: none;
     position: fixed;
@@ -130,47 +148,124 @@ footer {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7);
+    /* Darker overlay for better focus */
+    transition: opacity 0.3s ease-in-out;
 }
 
+/* Modal Content */
 .modal-content {
     background-color: #fff;
-    margin: 10% auto;
-    padding: 20px;
-    border-radius: 10px;
-    width: 400px;
+    margin: 5% auto;
+    padding: 30px 20px;
+    /* Increased padding for more spacing */
+    border-radius: 15px;
+    /* Softer rounded corners */
+    width: 350px;
+    max-width: 90%;
     text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    /* Slight shadow for depth */
+    transform: scale(0.9);
+    /* For animation */
+    transition: transform 0.3s ease-in-out;
 }
 
+/* Show Modal with Animation */
+.modal.show .modal-content {
+    transform: scale(1);
+    /* Smooth pop-in animation */
+}
+
+/* Modal Header */
 .modal-content h2 {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    color: #333;
+    font-size: 1.5em;
+    font-weight: bold;
+    position: relative;
 }
 
+/* Modal Inputs */
 .modal-content input {
-    width: 90%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
     border: 1px solid #ccc;
+    font-size: 1em;
+    transition: border-color 0.3s ease-in-out;
 }
 
+/* Focus effect for inputs */
+.modal-content input:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+/* Buttons */
 .modal-content button {
-    padding: 10px 20px;
+    padding: 12px 25px;
     background-color: #007BFF;
     color: white;
     border: none;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 8px;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease-in-out;
+    width: 100%;
+    /* Full-width for easier interaction */
+    margin-bottom: 15px;
 }
 
 .modal-content button:hover {
     background-color: #0056b3;
 }
 
+/* Secondary Button Style (for switch between login/signup) */
+.modal-content .secondary-btn {
+    background-color: transparent;
+    color: #007BFF;
+    border: 2px solid #007BFF;
+}
+
+.modal-content .secondary-btn:hover {
+    background-color: #007BFF;
+    color: white;
+}
+
+/* Close Button (X) */
 .modal-close {
-    color: red;
-    float: right;
+    color: #333;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    font-size: 1.5em;
+    font-weight: bold;
     cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.modal-close:hover {
+    color: #ff4b4b;
+    /* Red highlight on hover */
+}
+
+/* Additional Styling for Improved Look */
+.modal-content p {
+    color: #555;
+    font-size: 0.9em;
+    margin-top: 10px;
+}
+
+/* Optional link styling for "forgot password" or other links */
+.modal-content a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.modal-content a:hover {
+    text-decoration: underline;
 }
 
 .user-icon {

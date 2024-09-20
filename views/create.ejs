@@ -13,8 +13,16 @@
     <form action="/create" method="POST">
         <label for="title">Title:</label>
         <input type="text" name="title" required>
+
+        <label for="name">Name:</label>
+        <input type="text" name="name" required>
+
+        <label for="userEmail">Email Address:</label>
+        <input type="email" name="userEmail" required>
+
         <label for="content">Content:</label>
         <textarea name="content" required></textarea>
+
         <button type="submit">Create Post</button>
     </form>
 </body>
