@@ -273,3 +273,24 @@ footer {
     font-size: 1.5em;
     /* Adjust size as needed */
 }
+
+.create-post-button {
+    display: inline-block;
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    /* Green color */
+    color: white;
+    font-size: 1.2em;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.3s;
+    font-weight: bold;
+}
+
+.create-post-button:hover {
+    background-color: #218838;
+    /* Darker green on hover */
+    transform: scale(1.05);
+}

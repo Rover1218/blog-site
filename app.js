@@ -5,7 +5,6 @@ const dotenv = require('dotenv');
 const session = require('express-session');
 const postRoutes = require('./routes/postRoutes');
 const authRoutes = require('./routes/authRoutes');
-
 // Load environment variables from .env file
 dotenv.config();
 
@@ -28,6 +27,9 @@ if (!mongoURI) {
     console.error('MONGO_URI is not defined in the .env file.');
     process.exit(1); // Stop the server if the URI is not defined
 }
+app.get('/about', (req, res) => {
+    res.render('about');
+});
 
 mongoose.connect(mongoURI)
     .then(() => console.log('MongoDB connected'))
@@ -47,7 +49,6 @@ app.use(session({
 // Routes
 app.use('/', postRoutes);
 app.use('/', authRoutes);
-
 // Error handling middleware (for routes not found)
 app.use((req, res, next) => {
     res.status(404).render('404');

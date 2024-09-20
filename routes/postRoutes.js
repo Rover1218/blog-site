@@ -57,19 +57,41 @@ router.post('/create', async (req, res) => {
     const { title, content, name } = req.body;
     const userEmail = req.session.userEmail; // Get user email from session
 
+    // Check if title, content, and userEmail are provided
     if (!title || !content) {
         return res.status(400).send('Title and content are required');
     }
 
+    if (!userEmail) {
+        return res.status(400).send('User email is required');
+    }
+
     try {
-        await Post.create({ title, content, userEmail, name }); // Include userEmail
+        // Create the post with userEmail and other details
+        await Post.create({ title, content, userEmail, name });
         res.redirect('/'); // Redirect to homepage after creating the post
     } catch (err) {
         console.error('Error creating post:', err);
-        res.status(500).render('500', { message: 'Error creating post' }); // Render error page
+        res.status(500).render('500', { message: 'Error creating post' });
     }
 });
+// Profile route
+router.get('/profile', async (req, res) => {
+    const userId = req.session.userId; // Get userId from session
+    if (userId) {
+        try {
+            const user = await User.findById(userId); // Fetch user
+            const posts = await Post.find({ userEmail: user.email }); // Fetch user's posts using user.email
 
+            res.render('profile', { user: user, posts: posts || [] }); // Pass user and posts to the view
+        } catch (err) {
+            console.error('Error fetching user or posts:', err);
+            res.status(500).send('Error fetching user or posts');
+        }
+    } else {
+        res.redirect('/login'); // Redirect to login if user is not authenticated
+    }
+});
 // View a specific post by ID
 router.get('/post/:id', async (req, res) => {
     try {

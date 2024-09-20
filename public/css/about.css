@@ -1,0 +1,68 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #FF6F61, #6FA3EF);
+    color: white;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    /* Ensures body takes full height of the viewport */
+    display: flex;
+    flex-direction: column;
+    /* Arrange content vertically */
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #333;
+    padding: 40px;
+    border-radius: 15px;
+    max-width: 800px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    border: 8px solid #FF6F61;
+    position: relative;
+    z-index: 1;
+    margin: 20px auto;
+    /* Adds space between the content and the footer */
+    flex-grow: 1;
+    /* Makes the container take up remaining space */
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 2.5em;
+    color: #FF6F61;
+}
+
+p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.team-section {
+    margin-top: 40px;
+}
+
+.contact-info {
+    margin-top: 30px;
+    font-size: 1.1em;
+}
+
+.btn-home {
+    margin-top: 30px;
+    display: inline-block;
+    background-color: #007BFF;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.btn-home:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}

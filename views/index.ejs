@@ -32,16 +32,30 @@
             margin-top: 10px;
             padding: 10px 15px;
             background-color: #dc3545;
+            /* Bootstrap danger color */
             color: white;
             text-decoration: none;
             border-radius: 5px;
-            transition: background-color 0.3s, transform 0.3s;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
             font-weight: bold;
+            border: 2px solid transparent;
+            /* Add a border for a better effect */
         }
 
         .delete-button:hover {
             background-color: #c82333;
+            /* Darker shade on hover */
             transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            /* Shadow effect */
+            border: 2px solid #fff;
+            /* White border on hover */
+        }
+
+        .delete-button:active {
+            transform: scale(0.95);
+            /* Slightly shrink on click */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
         .posts {
@@ -66,6 +80,7 @@
         <div class="auth-links">
             <% if (user) { %>
                 <a href="/profile">Profile</a>
+                <a href="/About">About</a>
                 <a href="/logout">Logout</a>
                 <% } else { %>
                     <a href="javascript:void(0)" id="loginBtn">Login</a>
@@ -86,8 +101,7 @@
 
         <!-- Create New Post Button -->
         <% if (user) { %>
-            <a href="/create"
-                style="display: block; text-align: center; margin-bottom: 20px; font-size: 1.2em; color: #007BFF;">
+            <a href="/create" class="create-post-button">
                 Create New Post
             </a>
             <% } %>
@@ -101,7 +115,7 @@
                                     <%= post.title %>
                                 </a></h3>
                             <p><strong>Posted by:</strong>
-                                <%= post.userEmail %>
+                                <%= user.username%>
                             </p>
                             <p><strong>Date:</strong>
                                 <%= new Date(post.createdAt).toLocaleString() %>
@@ -119,7 +133,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2024 Blog Website. All Rights Reserved.</p>
+        <p>&copy; Anindya 2024 Blog Website. All Rights Reserved.</p>
     </footer>
 
     <!-- Login Modal -->

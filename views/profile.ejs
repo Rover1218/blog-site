@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #FF6F61, #6FA3EF);
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            color: #FF6F61;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        h2 {
+            margin-top: 30px;
+            font-size: 2em;
+            color: #FF6F61;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        li {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-home {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn-home:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        button {
+            background-color: #FF6F61;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #e55a49;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Profile</h1>
+
+        <% if (user) { %>
+            <p>Username: <%= user.username %>
+            </p>
+            <p>Email: <%= user.email %>
+            </p>
+            <% } else { %>
+                <p>User not found. Please log in.</p>
+                <% } %>
+
+                    <h2>Your Posts</h2>
+                    <% if (posts.length> 0) { %>
+                        <ul>
+                            <% posts.forEach(post=> { %>
+                                <li>
+                                    <h3>
+                                        <%= post.title %>
+                                    </h3>
+                                    <p>
+                                        <%= post.content.substring(0, 100) %>...
+                                    </p>
+                                    <form action="/delete/<%= post._id %>" method="POST">
+                                        <button type="submit">Delete</button>
+                                    </form>
+                                </li>
+                                <% }) %>
+                        </ul>
+                        <% } else { %>
+                            <p>No posts found.</p>
+                            <% } %>
+
+                                <a href="/" class="btn-home">Back to Home</a>
+    </div>
+</body>
+
+</html>
