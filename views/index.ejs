@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Home</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/index.css">
+    <style>
+        /* Add this CSS to your styles.css or keep it here for demonstration */
+        .view-button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+            font-weight: bold;
+        }
+
+        .view-button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .delete-button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #dc3545;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+            font-weight: bold;
+        }
+
+        .delete-button:hover {
+            background-color: #c82333;
+            transform: scale(1.05);
+        }
+
+        .posts {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .post {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <a href="/">Blog</a>
+        <div class="auth-links">
+            <% if (user) { %>
+                <a href="/profile">Profile</a>
+                <a href="/logout">Logout</a>
+                <% } else { %>
+                    <a href="javascript:void(0)" id="loginBtn">Login</a>
+                    <a href="javascript:void(0)" id="signupBtn">Sign Up</a>
+                    <% } %>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="content-container">
+        <!-- Search Bar -->
+        <div class="search-container">
+            <form action="/search" method="GET">
+                <input type="text" name="query" placeholder="Search posts..." required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <!-- Create New Post Button -->
+        <% if (user) { %>
+            <a href="/create"
+                style="display: block; text-align: center; margin-bottom: 20px; font-size: 1.2em; color: #007BFF;">
+                Create New Post
+            </a>
+            <% } %>
+
+                <!-- Blog Posts Section -->
+                <h2>All Posts</h2>
+                <div class="posts">
+                    <% posts.forEach(post=> { %>
+                        <div class="post">
+                            <h3><a href="javascript:void(0)">
+                                    <%= post.title %>
+                                </a></h3>
+                            <p><strong>Posted by:</strong>
+                                <%= post.userEmail %>
+                            </p>
+                            <p><strong>Date:</strong>
+                                <%= new Date(post.createdAt).toLocaleString() %>
+                            </p>
+                            <a href="/post/<%= post._id %>" class="view-button">View</a>
+                            <% if (user && post.userEmail===user.email) { %>
+                                <form action="/delete/<%= post._id %>" method="POST" style="display: inline;">
+                                    <button type="submit" class="delete-button">Delete</button>
+                                </form>
+                                <% } %>
+                        </div>
+                        <% }); %>
+                </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Blog Website. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" id="loginClose">&times;</span>
+            <h2>Login</h2>
+            <form action="/login" method="POST">
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" id="signupClose">&times;</span>
+            <h2>Sign Up</h2>
+            <form action="/signup" method="POST">
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Post Detail Modal -->
+    <div id="postModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" id="postClose">&times;</span>
+            <h2 id="modalPostTitle"></h2>
+            <p id="modalPostContent"></p>
+            <p><strong>Posted by:</strong> <span id="modalPostedBy"></span></p>
+            <p><strong>Date:</strong> <span id="modalPostDate"></span></p>
+        </div>
+    </div>
+
+    <!-- External JavaScript -->
+    <script src="/js/modal.js"></script>
+</body>
+
+</html>
