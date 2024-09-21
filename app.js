@@ -47,8 +47,12 @@ mongoose.connect(mongoURI)
 app.use(session({
     secret: process.env.SESSION_SECRET || 'your_secret_key',
     resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false } // Set to true if using HTTPS
+    saveUninitialized: false,
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGO_URI, // Use your MongoDB connection string
+        ttl: 14 * 24 * 60 * 60 // = 14 days. Default
+    }),
+    cookie: { secure: true } // Set to true if using HTTPS
 }));
 
 // Routes
