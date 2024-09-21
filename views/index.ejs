@@ -9,7 +9,78 @@
     <link rel="stylesheet" href="/css/index.css">
     <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
     <style>
-        /* Add this CSS to your styles.css or keep it here for demonstration */
+        /* Loader styles */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loader-cube {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotateCube 2s linear infinite;
+        }
+
+        .loader-cube div {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: #3498db;
+            border: 2px solid #f3f3f3;
+            box-sizing: border-box;
+        }
+
+        /* Create the six sides of the cube */
+        .loader-cube .front {
+            transform: translateZ(50px);
+        }
+
+        .loader-cube .back {
+            transform: rotateY(180deg) translateZ(50px);
+        }
+
+        .loader-cube .left {
+            transform: rotateY(-90deg) translateZ(50px);
+        }
+
+        .loader-cube .right {
+            transform: rotateY(90deg) translateZ(50px);
+        }
+
+        .loader-cube .top {
+            transform: rotateX(90deg) translateZ(50px);
+        }
+
+        .loader-cube .bottom {
+            transform: rotateX(-90deg) translateZ(50px);
+        }
+
+        @keyframes rotateCube {
+            0% {
+                transform: rotateX(0deg) rotateY(0deg);
+            }
+
+            100% {
+                transform: rotateX(360deg) rotateY(360deg);
+            }
+        }
+
+        /* Hide page content until loader finishes */
+        body.loading {
+            overflow: hidden;
+        }
+
+        /* Page content styles */
         .view-button {
             display: inline-block;
             margin-top: 10px;
@@ -101,12 +172,10 @@
             overflow: hidden;
             position: relative;
             gap: 20px;
-            /* Reduced gap for smaller screens */
             flex-wrap: wrap;
             transition: all 0.5s ease;
         }
 
-        /* Individual floating image */
         .floating-image {
             width: 250px;
             height: 250px;
@@ -116,16 +185,13 @@
             cursor: pointer;
             will-change: transform;
             animation: fadeIn 0.5s ease forwards;
-            /* Fade-in effect on load */
         }
 
-        /* Hover effect */
         .floating-image:hover {
             filter: grayscale(0);
             transform: scale(1.1);
         }
 
-        /* Keyframe animations for initial loading */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -138,27 +204,34 @@
             }
         }
 
-        /* Responsive adjustments for mobile devices */
         @media (max-width: 600px) {
             .floating-images {
                 gap: 10px;
-                /* Reduce gap for better fit */
                 padding: 0 10px;
-                /* Add some padding for spacing on smaller screens */
             }
 
             .floating-image {
                 width: 160px;
                 height: 160px;
-                /* Smaller size for mobile screens */
                 border-radius: 10px;
-                /* Optional: Add a border radius for a softer look */
             }
         }
     </style>
 </head>
 
-<body>
+<body class="loading">
+    <!-- Loader -->
+    <div id="loader">
+        <div class="loader-cube">
+            <div class="front"></div>
+            <div class="back"></div>
+            <div class="left"></div>
+            <div class="right"></div>
+            <div class="top"></div>
+            <div class="bottom"></div>
+        </div>
+    </div>
+
     <!-- Navigation Bar -->
     <div class="navbar">
         <a href="/">Blog</a>
@@ -166,7 +239,7 @@
             <% if (user) { %>
                 <a href="/profile">Profile</a>
                 <a href="/About">About</a>
-                <a href="/news">Latest News</a> <!-- Add this line -->
+                <a href="/news">Latest News</a>
                 <a href="/logout">Logout</a>
                 <% } else { %>
                     <a href="javascript:void(0)" id="loginBtn">Login</a>
@@ -178,10 +251,7 @@
     <!-- Main Content Container -->
     <div class="content-container">
         <% if (user) { %>
-            <!-- Create New Post Button -->
             <a href="/create" class="create-post-button">Create New Post</a>
-
-            <!-- Blog Posts Section -->
             <h2>All Posts</h2>
             <div class="posts">
                 <% posts.forEach(post=> { %>
@@ -205,17 +275,13 @@
                     <% }); %>
             </div>
             <% } else { %>
-                <!-- Landing Page Message -->
                 <div class="landing-message">
                     <h2>Welcome to Our Blog Channel!</h2>
-                    <p> We invite you to share your insights, experiences, and stories with us. Whether it’s a lesson
+                    <p>We invite you to share your insights, experiences, and stories with us. Whether it’s a lesson
                         learned, a challenge overcome, or a moment of joy, your voice matters. Engage with like-minded
-                        individuals, inspire others, and be part of a supportive community where your thoughts can make
-                        a difference. Let’s connect, share, and grow together!</p>
-                    <p>Please log in to view all posts and create new
-                        ones.</p>
+                        individuals, inspire others, and be part of a supportive community.</p>
+                    <p>Please log in to view all posts and create new ones.</p>
                 </div>
-                <!-- Floating Images Section -->
                 <div class="floating-images">
                     <% const images=['/images/image1.jpg', '/images/image2.jpg' , '/images/image3.jpg' ]; %>
                         <% images.forEach((image, index)=> { %>
@@ -258,8 +324,16 @@
             <p>Already have an account? <a href="#" id="openLoginModal">Login</a></p>
         </div>
     </div>
+
     <!-- External JavaScript -->
     <script src="/js/modal.js"></script>
+    <script>
+        // Wait for the entire page to load before removing the loader
+        window.addEventListener('load', function () {
+            document.getElementById('loader').style.display = 'none';
+            document.body.classList.remove('loading');
+        });
+    </script>
 </body>
 
 </html>
