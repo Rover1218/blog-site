@@ -1,0 +1,59 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-image: url('../images/pngtree-breaking-news-template-for-tv-or-podcast-exploring-the-intersection-of-image_3705378.jpg');
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+.news-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.news-article {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    transition: transform 0.2s;
+}
+
+.news-article h2 {
+    font-size: 1.5em;
+    margin: 0 0 10px;
+}
+
+.news-article a {
+    text-decoration: none;
+    color: #FF6F61;
+    /* Vibrant color */
+}
+
+.news-article a:hover {
+    text-decoration: underline;
+}
+
+.news-article p {
+    margin: 10px 0;
+    font-size: 0.9em;
+}
+
+.news-article small {
+    color: #777;
+    font-size: 0.8em;
+}
+
+/* Hover effect */
+.news-article:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}

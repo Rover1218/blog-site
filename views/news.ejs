@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latest News</title>
+    <link rel="stylesheet" href="/css/news.css"> <!-- Link to your CSS file -->
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+    <h1>Latest News</h1>
+    <div class="news-container">
+        <% articles.forEach(article=> { %>
+            <div class="news-article">
+                <h2><a href="<%= article.url %>" target="_blank">
+                        <%= article.title %>
+                    </a></h2>
+                <p>
+                    <%= article.description %>
+                </p>
+                <small>Published at: <%= new Date(article.publishedAt).toLocaleString() %></small>
+            </div>
+            <% }); %>
+    </div>
+</body>
+
+</html>

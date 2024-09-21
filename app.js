@@ -7,6 +7,7 @@ const postRoutes = require('./routes/postRoutes');
 const authRoutes = require('./routes/authRoutes');
 const favicon = require('serve-favicon'); // Import the favicon middleware
 const path = require('path');
+const newsRoutes = require('./routes/newsRoutes');
 // Load environment variables from .env file
 dotenv.config();
 
@@ -53,6 +54,7 @@ app.use(session({
 // Routes
 app.use('/', postRoutes);
 app.use('/', authRoutes);
+app.use('/', newsRoutes);
 // Error handling middleware (for routes not found)
 app.use((req, res, next) => {
     res.status(404).render('404');
