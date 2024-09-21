@@ -100,33 +100,57 @@
             overflow: hidden;
             position: relative;
             gap: 40px;
-            /* Adds gap between images */
+            flex-wrap: wrap;
+            /* Allows wrapping for responsiveness */
+            transition: all 0.5s ease;
+            /* Smooth transition for the entire container */
         }
 
         .floating-image {
             width: 250px;
-            /* Adjust size as needed */
             height: 250px;
-            /* Adjust size as needed */
             object-fit: cover;
-            transition: 0.3s linear;
+            transition: transform 0.3s ease, filter 0.3s ease;
+            /* Smooth transitions */
             filter: grayscale(100%);
-            -webkit-mask:
-                left var(--_i, 0%) top 10% / 45% 45% no-repeat linear-gradient(#000 0 0),
-                bottom var(--_i, 0%) left 10% / 45% 45% no-repeat linear-gradient(#000 0 0),
-                top var(--_i, 0%) right 10% / 45% 45% no-repeat linear-gradient(#000 0 0),
-                right var(--_i, 0%) bottom 10% / 45% 45% no-repeat linear-gradient(#000 0 0);
-            mask: var(--m);
             cursor: pointer;
+            will-change: transform;
+            /* Hint to the browser that a transform will happen */
         }
 
         .floating-image:hover {
-            --_i: 10%;
             filter: grayscale(0);
             /* Removes grayscale on hover */
-            transition: transform 0.3s ease, filter 0.3s linear;
             transform: scale(1.1);
             /* Slight zoom effect */
+        }
+
+        /* Keyframe animations for initial loading */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .floating-image {
+            animation: fadeIn 0.5s ease forwards;
+            /* Fade-in effect on load */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .floating-image {
+                width: 200px;
+                /* Adjust image size */
+                height: 200px;
+                /* Adjust image size */
+            }
         }
     </style>
 </head>

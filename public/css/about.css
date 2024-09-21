@@ -2,13 +2,9 @@ body {
     font-family: 'Arial', sans-serif;
     background-image: url('../images/about.jpg');
     background-size: cover;
-    /* Ensures the background image covers the entire viewport */
     background-position: center;
-    /* Centers the image */
     background-repeat: no-repeat;
-    /* Prevents the image from repeating */
     background-attachment: fixed;
-    /* Keeps the background in place while scrolling */
     color: white;
     margin: 0;
     padding: 0;
@@ -20,7 +16,8 @@ body {
 .container {
     background-color: rgba(255, 255, 255, 0.95);
     color: #333;
-    padding: 40px;
+    padding: 2rem;
+    /* Use rem for better scaling */
     border-radius: 15px;
     max-width: 800px;
     opacity: 90%;
@@ -31,38 +28,45 @@ body {
     position: relative;
     z-index: 1;
     margin: 20px auto;
-    /* Adds space between the content and the footer */
     flex-grow: 1;
-    /* Makes the container take up remaining space */
 }
 
 h1 {
-    margin-bottom: 20px;
-    font-size: 2.5em;
+    margin-bottom: 1rem;
+    /* Use rem for better scaling */
+    font-size: 2.5rem;
+    /* Use rem for better scaling */
     color: #FF6F61;
 }
 
 p {
-    font-size: 1.2em;
-    margin-bottom: 20px;
+    font-size: 1.2rem;
+    /* Use rem for better scaling */
+    margin-bottom: 1rem;
+    /* Use rem for better spacing */
     line-height: 1.6;
 }
 
 .team-section {
-    margin-top: 40px;
+    margin-top: 2rem;
+    /* Use rem for better spacing */
 }
 
 .contact-info {
-    margin-top: 30px;
-    font-size: 1.1em;
+    margin-top: 1.5rem;
+    /* Use rem for better spacing */
+    font-size: 1.1rem;
+    /* Use rem for better scaling */
 }
 
 .btn-home {
-    margin-top: 30px;
+    margin-top: 2rem;
+    /* Use rem for better spacing */
     display: inline-block;
     background-color: #007BFF;
     color: white;
-    padding: 10px 20px;
+    padding: 0.8rem 1.5rem;
+    /* Use rem for better scaling */
     border-radius: 8px;
     text-decoration: none;
     font-weight: bold;
@@ -72,4 +76,27 @@ p {
 .btn-home:hover {
     background-color: #0056b3;
     transform: scale(1.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2rem;
+        /* Smaller heading on smaller screens */
+    }
+
+    .container {
+        padding: 1rem;
+        /* Reduce padding */
+    }
+
+    p {
+        font-size: 1rem;
+        /* Smaller font size */
+    }
+
+    .btn-home {
+        padding: 0.6rem 1.2rem;
+        /* Smaller button padding */
+    }
 }
