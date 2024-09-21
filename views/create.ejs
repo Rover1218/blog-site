@@ -23,6 +23,40 @@
         .back-button:hover {
             background-color: #0056b3;
         }
+
+        label {
+            margin-top: 15px;
+            display: block;
+        }
+
+        input,
+        select,
+        textarea,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .optional {
+            font-size: 0.9em;
+            color: #888;
+        }
     </style>
 </head>
 
@@ -30,10 +64,10 @@
     <h1>Create New Post</h1>
     <form action="/create" method="POST">
         <label for="title">Title:*</label>
-        <input type="text" name="title" required>
+        <input type="text" name="title" placeholder="Enter Title here" required>
 
         <label for="name">Name:*</label>
-        <input type="text" name="name" required>
+        <input type="text" name="name" placeholder="Enter Name here" required>
 
         <label for="topic">Topic:*</label>
         <select name="topic" required>
@@ -59,10 +93,23 @@
             <option value="self-improvement">Self-Improvement</option>
             <option value="history">History</option>
             <option value="others">Others</option>
-            <!-- Add more topics as needed -->
         </select>
+
         <label for="content">Content:*</label>
-        <textarea name="content" required></textarea>
+        <textarea name="content" placeholder="Enter Content here" required></textarea>
+
+        <label for="secondParagraph">Second Paragraph (optional):</label>
+        <textarea name="secondParagraph" placeholder="Additional content for the post (optional)"></textarea>
+
+        <label for="thirdParagraph">Third Paragraph (optional):</label>
+        <textarea name="thirdParagraph" placeholder="More details about the topic (optional)"></textarea>
+
+        <label for="bulletPoints">Bullet Points (optional):</label>
+        <textarea name="bulletPoints" placeholder="Separate each point with a line break (optional)"></textarea>
+
+        <label for="summary">Summary (optional):</label>
+        <textarea name="summary" placeholder="Brief summary of the post (optional)"></textarea>
+
         <button type="submit">Create Post</button>
     </form>
 

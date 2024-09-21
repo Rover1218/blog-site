@@ -16,6 +16,10 @@ const postSchema = new mongoose.Schema({
     },
     topic: { type: String, required: true }, // User's name
     content: { type: String, required: true },
+    secondParagraph: { type: String, default: '' }, // Optional second paragraph
+    thirdParagraph: { type: String, default: '' }, // Optional third paragraph
+    bulletPoints: { type: String, default: '' }, // Optional bullet points
+    summary: { type: String, default: '' }, // Optional summary
     createdAt: { type: Date, default: Date.now }
 });
 

@@ -5,12 +5,15 @@ body {
     color: #333;
     /* Dark text */
     margin: 0;
-    padding: 0;
+    padding: 20px;
+    /* Add padding for spacing */
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    /* Allows for vertical stacking */
     align-items: center;
-    height: 100vh;
-    overflow: hidden;
+    /* Center content horizontally */
+    overflow: auto;
+    /* Allow scrolling */
 }
 
 .loader {
@@ -39,7 +42,8 @@ body {
 .post-container {
     max-width: 800px;
     /* Post container width */
-    margin: 0 auto;
+    margin: 20px auto;
+    /* Center container and add margin */
     background: white;
     padding: 30px;
     border-radius: 10px;
