@@ -89,6 +89,18 @@ button:hover {
     transform: scale(1.05);
 }
 
+select {
+    border: 2px solid #FF6F61;
+    border-radius: 8px;
+    width: 100%;
+    padding: 12px;
+}
+
+select:focus {
+    border-color: #6FA3EF;
+    outline: none;
+}
+
 /* Responsive adjustments */
 @media (max-width: 600px) {
     h1 {
