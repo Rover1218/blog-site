@@ -53,7 +53,7 @@ app.use(session({
         mongoUrl: process.env.MONGO_URI, // Use your MongoDB connection string
         ttl: 14 * 24 * 60 * 60 // = 14 days. Default
     }),
-    cookie: { secure: flase } // Set to true if using HTTPS
+    cookie: { secure: false } // Set to true if using HTTPS
 }));
 
 // Routes
