@@ -16,7 +16,8 @@ body {
     flex-direction: column;
     /* Enables content and footer alignment */
     font-family: 'Roboto', sans-serif;
-    background-image: url('../images/background.gif');
+    background-image: url('../images/background.jpg');
+    background-position: center;
     padding: 0 20px;
     color: #333;
 }
@@ -26,7 +27,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(135deg, #007BFF, #00d4ff);
+    background: linear-gradient(135deg, #8c7901, #000000);
     padding: 10px 10px;
     position: relative;
     /* Fixes positioning to avoid content overlap */

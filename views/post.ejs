@@ -14,7 +14,12 @@
 <body
     onload="document.querySelector('.post-container').style.opacity = 1; document.querySelector('.loader').style.display = 'none';">
     <div class="loader"></div>
+
     <div class="post-container">
+        <label class="dark-mode-toggle">
+            <input type="checkbox" onchange="toggleDarkMode()">
+            <span class="slider"></span>
+        </label>
         <h1>
             <%= post.title %>
         </h1>
@@ -47,6 +52,13 @@
         </p>
         <a href="/">Back to Home</a>
     </div>
+
+    <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            document.querySelector('.post-container').classList.toggle('dark-mode');
+        }
+    </script>
 </body>
 
 </html>
