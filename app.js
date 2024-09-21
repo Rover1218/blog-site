@@ -5,12 +5,16 @@ const dotenv = require('dotenv');
 const session = require('express-session');
 const postRoutes = require('./routes/postRoutes');
 const authRoutes = require('./routes/authRoutes');
+const favicon = require('serve-favicon'); // Import the favicon middleware
+const path = require('path');
 // Load environment variables from .env file
 dotenv.config();
 
 // Initialize express app
 const app = express();
-
+app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
+// Serve favicon
+app.use(favicon(__dirname + '/public/images/favicon.ico')); // Adjust the path as needed
 // Middleware to parse URL-encoded data and JSON
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -64,4 +68,9 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+
+    // Ping the console every 10 seconds
+    setInterval(() => {
+        console.log('Ping: Server is up and running...');
+    }, 300000); // 10000 milliseconds = 10 seconds
 });
