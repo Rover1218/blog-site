@@ -8,6 +8,7 @@ const authRoutes = require('./routes/authRoutes');
 const favicon = require('serve-favicon'); // Import the favicon middleware
 const path = require('path');
 const newsRoutes = require('./routes/newsRoutes');
+const MongoStore = require('connect-mongo');
 // Load environment variables from .env file
 dotenv.config();
 
