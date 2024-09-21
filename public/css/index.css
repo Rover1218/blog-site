@@ -16,7 +16,7 @@ body {
     flex-direction: column;
     /* Enables content and footer alignment */
     font-family: 'Roboto', sans-serif;
-    background-image: url('../images/background.jpg');
+    background-image: url('../images/background.gif');
     padding: 0 20px;
     color: #333;
 }
