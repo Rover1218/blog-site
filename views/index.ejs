@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog Home</title>
-    <link rel="stylesheet" href="/css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/index.css">
     <style>
@@ -68,12 +67,13 @@
         .landing-message {
             text-align: center;
             margin: 50px 0;
-            color: #ffcc00;
+            color: #00ffdd;
         }
 
         .landing-message h2 {
             font-size: 2em;
             margin-bottom: 10px;
+            color: #d4ff00;
         }
 
         .landing-message p {
@@ -84,7 +84,7 @@
             margin: 10px;
             padding: 10px 20px;
             background-color: #007BFF;
-            color: white;
+            color: rgb(255, 255, 255);
             text-decoration: none;
             border-radius: 5px;
         }
@@ -97,78 +97,35 @@
             display: flex;
             justify-content: center;
             overflow: hidden;
-            /* Prevents overflow */
             position: relative;
-            /* Needed for absolute positioning of images */
-            height: 200px;
-            /* Increased height for larger images */
+            gap: 40px;
+            /* Adds gap between images */
         }
 
         .floating-image {
-            width: 200px;
-            /* Increased size */
-            height: auto;
-            margin: 0 20px;
-            /* Adjust spacing between images */
-            position: absolute;
-            /* Absolute positioning for animation */
-            opacity: 0;
-            /* Start with images hidden */
-            animation: fade 15s linear infinite;
-            /* Animation properties */
+            width: 250px;
+            /* Adjust size as needed */
+            height: 250px;
+            /* Adjust size as needed */
+            object-fit: cover;
+            transition: 0.3s linear;
+            filter: grayscale(100%);
+            -webkit-mask:
+                left var(--_i, 0%) top 10% / 45% 45% no-repeat linear-gradient(#000 0 0),
+                bottom var(--_i, 0%) left 10% / 45% 45% no-repeat linear-gradient(#000 0 0),
+                top var(--_i, 0%) right 10% / 45% 45% no-repeat linear-gradient(#000 0 0),
+                right var(--_i, 0%) bottom 10% / 45% 45% no-repeat linear-gradient(#000 0 0);
+            mask: var(--m);
+            cursor: pointer;
         }
 
-        @keyframes fade {
-
-            0%,
-            10% {
-                opacity: 0;
-                /* Start invisible */
-                transform: translateX(-100%);
-                /* Start from left outside */
-            }
-
-            15%,
-            30% {
-                opacity: 1;
-                /* Fade in */
-                transform: translateX(0);
-                /* Slide into position */
-            }
-
-            50% {
-                opacity: 1;
-                /* Fully visible */
-            }
-
-            70%,
-            90% {
-                opacity: 1;
-                /* Still fully visible */
-            }
-
-            95%,
-            100% {
-                opacity: 0;
-                /* Fade out */
-                transform: translateX(100%);
-                /* Move to right outside */
-            }
-        }
-
-        .floating-image:nth-child(1) {
-            animation-delay: 0s;
-            /* First image starts immediately */
-        }
-
-        .floating-image:nth-child(2) {
-            animation-delay: 5s;
-            /* Delay for second image */
-        }
-
-        .floating-image:nth-child(3) {
-            animation-delay: 10s;
-            /* Delay for third image */
+        .floating-image:hover {
+            --_i: 10%;
+            filter: grayscale(0);
+            /* Removes grayscale on hover */
+            transition: transform 0.3s ease, filter 0.3s linear;
+            transform: scale(1.1);
+            /* Slight zoom effect */
         }
     </style>
 </head>
@@ -227,11 +184,10 @@
                         ones.</p>
                 </div>
                 <!-- Floating Images Section -->
-                <!-- Floating Images Section -->
                 <div class="floating-images">
                     <% const images=['/images/image1.jpg', '/images/image2.jpg' , '/images/image3.jpg' ]; %>
-                        <% images.forEach(image=> { %>
-                            <img src="<%= image %>" alt="Blog Image" class="floating-image">
+                        <% images.forEach((image, index)=> { %>
+                            <img src="<%= image %>" alt="Blog Image" class="floating-image" style="--i: <%= index %>">
                             <% }); %>
                 </div>
                 <% } %>

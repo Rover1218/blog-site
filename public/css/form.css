@@ -1,6 +1,6 @@
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #FF6F61, #6FA3EF);
+    background-image: url('../images/form.jpg');
     color: #fff;
     margin: 0;
     padding: 20px;
