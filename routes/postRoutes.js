@@ -23,24 +23,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Search route
-router.get('/search', async (req, res) => {
-    const searchQuery = req.query.query;
-    try {
-        // Find posts by title (case-insensitive)
-        const posts = await Post.find({ title: { $regex: searchQuery, $options: 'i' } });
-        const user = req.session.userEmail ? await User.findOne({ email: req.session.userEmail }) : null;
-
-        if (posts.length === 0) {
-            return res.render('index', { user, posts: [], message: 'No posts found matching your search.' });
-        }
-        res.render('index', { user, posts });
-    } catch (err) {
-        console.error('Error during search:', err);
-        res.status(500).render('500', { message: 'Error during search' }); // Render error page
-    }
-});
-
 // Render the form to create a new post
 router.get('/create', async (req, res) => {
     try {
