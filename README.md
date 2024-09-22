@@ -93,10 +93,6 @@ blog-site/
 - **Post Categories**: Organize posts into categories for easier navigation.
 - **Post Editing**: Let users edit their existing blog posts.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## Contributing
 
 If you'd like to contribute to the project, please follow these steps:
