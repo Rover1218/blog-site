@@ -7,8 +7,9 @@
     <title>Latest News</title>
     <link rel="stylesheet" href="/css/news.css">
     <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+
     <!-- Google AdSense Code -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5695226002248794"
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=<%= adsenseClient %>"
         crossorigin="anonymous"></script>
 </head>
 
@@ -17,8 +18,8 @@
 
     <!-- AdSense Ad -->
     <div class="adsense-ad" style="text-align: center; margin: 20px 0;">
-        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5695226002248794"
-            data-ad-slot="6582507290" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="<%= adsenseClient %>"
+            data-ad-slot="<%= adsenseSlot %>" data-ad-format="auto" data-full-width-responsive="true"></ins>
         <script>
             (adsbygoogle = window.adsbygoogle || []).push({});
         </script>
@@ -37,6 +38,14 @@
             </div>
             <% }); %>
     </div>
+
+    <!-- Back Button -->
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="/"
+            style="padding: 10px 20px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; text-decoration: none;">Back
+            to Home</a>
+    </div>
+
 </body>
 
 </html>
