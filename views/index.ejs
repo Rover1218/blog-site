@@ -259,6 +259,9 @@
                         <h3><a href="/post/<%= post._id %>">
                                 <%= post.title %>
                             </a></h3>
+                        <p>
+                            <%= post.content.slice(0, 100) %>...
+                        </p>
                         <p><strong>Posted by:</strong>
                             <%= post.name %>
                         </p>
