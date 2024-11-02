@@ -5,9 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Latest News</title>
-    <!-- Updated Google AdSense Code -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5695226002248794"
-        crossorigin="anonymous"></script>
     <style>
         * {
             margin: 0;
@@ -27,7 +24,7 @@
             overflow-x: hidden;
         }
 
-        /* Animated Background */
+        /* Enhanced Animated Background */
         .animated-bg {
             position: fixed;
             top: 0;
@@ -40,11 +37,22 @@
 
         .particle {
             position: absolute;
-            width: 2px;
-            height: 2px;
             background: rgba(255, 255, 255, 0.5);
             border-radius: 50%;
+            pointer-events: none;
             animation: particleFloat 20s infinite linear;
+        }
+
+        /* Added wave effect */
+        .wave {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,208C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: 100% 100px;
+            animation: waveMove 20s linear infinite;
         }
 
         @keyframes gradientBG {
@@ -63,17 +71,28 @@
 
         @keyframes particleFloat {
             0% {
-                transform: translateY(0) translateX(0);
+                transform: translateY(0) translateX(0) rotate(0deg);
                 opacity: 0;
             }
 
             50% {
-                opacity: 0.5;
+                opacity: 0.8;
+                transform: translateY(-50vh) translateX(50vw) rotate(180deg);
             }
 
             100% {
-                transform: translateY(-100vh) translateX(100vw);
+                transform: translateY(-100vh) translateX(100vw) rotate(360deg);
                 opacity: 0;
+            }
+        }
+
+        @keyframes waveMove {
+            0% {
+                background-position-x: 0;
+            }
+
+            100% {
+                background-position-x: 1440px;
             }
         }
 
@@ -81,6 +100,8 @@
             position: relative;
             z-index: 1;
             padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         h1 {
@@ -107,8 +128,6 @@
         }
 
         .news-container {
-            max-width: 1200px;
-            margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
@@ -121,16 +140,17 @@
             border-radius: 15px;
             padding: 1.5rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
             animation: fadeIn 0.5s ease-out forwards;
             opacity: 0;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .news-article:hover {
-            transform: translateY(-5px);
+            transform: translateY(-5px) scale(1.02);
             box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
             border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .news-article h2 {
@@ -154,7 +174,7 @@
             margin-bottom: 1rem;
             display: -webkit-box;
             -webkit-line-clamp: 3;
-            line-clamp: 3;
+            line-clamp: 6;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -165,49 +185,6 @@
             display: block;
         }
 
-        /* Updated Ad Containers */
-        .ad-container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 1rem;
-            margin: 2rem auto;
-            max-width: 1200px;
-            min-height: 280px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .ad-container::before {
-            content: 'Advertisement';
-            position: absolute;
-            top: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        /* Responsive Ad Units */
-        .horizontal-ad {
-            display: block;
-            width: 100%;
-            height: 90px;
-            margin: 0 auto;
-        }
-
-        .square-ad {
-            display: block;
-            width: 336px;
-            height: 280px;
-            margin: 0 auto;
-        }
-
         .back-button {
             display: inline-block;
             padding: 12px 24px;
@@ -216,13 +193,14 @@
             text-decoration: none;
             border-radius: 25px;
             font-weight: 500;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 184, 148, 0.2);
         }
 
         .back-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 8px rgba(0, 184, 148, 0.3);
+            background: linear-gradient(135deg, #00cec9, #00b894);
         }
 
         @keyframes fadeIn {
@@ -273,75 +251,69 @@
             .news-article {
                 padding: 1.25rem;
             }
-
-            .square-ad {
-                width: 300px;
-                height: 250px;
-            }
         }
     </style>
 </head>
 
 <body>
     <div class="animated-bg" id="animatedBg"></div>
+    <div class="wave"></div>
     <div class="content-wrapper">
         <h1>Latest News</h1>
-
-        <!-- Top Ad -->
-        <div class="ad-container">
-            <ins class="adsbygoogle horizontal-ad" style="display:block" data-ad-client="ca-pub-5695226002248794"
-                data-ad-slot="6582507290" data-ad-format="auto" data-full-width-responsive="true"></ins>
-        </div>
 
         <div class="news-container">
             <% articles.forEach((article, index)=> { %>
                 <div class="news-article" style="--i: <%= index %>">
-                    <h2>
-                        <a href="<%= article.url %>" target="_blank">
-                            <%= article.title %>
-                        </a>
-                    </h2>
-                    <p>
-                        <%= article.description %>
-                    </p>
-                    <small>Published at: <%= new Date(article.publishedAt).toLocaleString() %></small>
+                    <% if (article.thumbnail) { %>
+                        <img src="<%= article.thumbnail %>" alt="<%= article.title %>"
+                            style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 1rem;">
+                        <% } %>
+                            <h2>
+                                <a href="<%= article.url %>" target="_blank">
+                                    <%= article.title %>
+                                </a>
+                            </h2>
+                            <p>
+                                <%= article.description %>
+                            </p>
+                            <small>
+                                Published: <%= new Date(article.publishedAt).toLocaleString() %>
+                                    <br>
+                                    Section: <%= article.section %>
+                            </small>
                 </div>
-
-                <% if ((index + 1) % 6===0) { %>
-                    <!-- In-feed ad after every 6 articles -->
-                    <div class="ad-container" style="grid-column: 1 / -1;">
-                        <ins class="adsbygoogle square-ad" style="display:block"
-                            data-ad-client="ca-pub-5695226002248794" data-ad-slot="6582507290" data-ad-format="auto"
-                            data-full-width-responsive="true"></ins>
-                    </div>
-                    <% } %>
-                        <% }); %>
+                <% }); %>
         </div>
 
-        <!-- Bottom Ad -->
-        <div class="ad-container">
-            <ins class="adsbygoogle horizontal-ad" style="display:block" data-ad-client="ca-pub-5695226002248794"
-                data-ad-slot="6582507290" data-ad-format="auto" data-full-width-responsive="true"></ins>
-        </div>
-
-        <!-- Back Button -->
         <div style="text-align: center; margin: 2rem 0;">
             <a href="/" class="back-button">Back to Home</a>
         </div>
     </div>
 
     <script>
-        // Create animated background particles
+        // Enhanced particle system
         function createParticles() {
             const bg = document.getElementById('animatedBg');
             const particleCount = 50;
+            const particleSizes = [2, 3, 4]; // Different particle sizes
 
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
+
+                // Random size from the sizes array
+                const size = particleSizes[Math.floor(Math.random() * particleSizes.length)];
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+
+                // Random starting position
                 particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = Math.random() * 100 + 'vh';
+
+                // Random animation properties
                 particle.style.animationDelay = Math.random() * 20 + 's';
                 particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+
                 bg.appendChild(particle);
             }
         }
@@ -349,9 +321,10 @@
         // Initialize particles
         createParticles();
 
-        // Add intersection observer for smooth scroll animations
+        // Intersection Observer for smooth scroll animations
         const observerOptions = {
-            threshold: 0.1
+            threshold: 0.1,
+            rootMargin: '50px'
         };
 
         const observer = new IntersectionObserver((entries) => {
@@ -362,17 +335,10 @@
             });
         }, observerOptions);
 
-        document.querySelectorAll('.news-article').forEach(article => {
+        document.querySelectorAll('.news-article').forEach((article, index) => {
             article.style.animationPlayState = 'paused';
+            article.style.animationDelay = `${index * 0.1}s`;
             observer.observe(article);
-        });
-
-        // Initialize AdSense ads
-        window.addEventListener('load', function () {
-            // Push ads after DOM is fully loaded
-            document.querySelectorAll('.adsbygoogle').forEach(function (ad) {
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            });
         });
     </script>
 </body>

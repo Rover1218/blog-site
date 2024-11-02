@@ -6,65 +6,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Let's Blog Together</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/index.css">
-    <link rel="stylesheet" href="/css/animations.css">
-    <script src="/js/animations.js" defer></script>
-    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'spin-slow': 'spin 3s linear infinite',
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                        'scale': 'scale 0.3s ease-in-out',
+                        'gradient': 'gradient 15s ease infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        scale: {
+                            '0%': { transform: 'scale(1)' },
+                            '100%': { transform: 'scale(1.05)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        /* Loader styles */
-        #loader {
+        .animated-background {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .modal {
+            display: none;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: black;
-            z-index: 9999;
+            inset: 0;
+            z-index: 50;
+            overflow-y: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal.active {
             display: flex;
+            visibility: visible;
+            opacity: 1;
             align-items: center;
             justify-content: center;
         }
 
-        .loader-cube {
-            width: 100px;
-            height: 100px;
+        .modal-content {
+            transform: scale(0.95);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            margin: 1rem;
+            width: 100%;
+            max-width: 28rem;
             position: relative;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .loader-cube {
             transform-style: preserve-3d;
             animation: rotateCube 2s linear infinite;
         }
 
-        .loader-cube div {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            background-color: #3498db;
-            border: 2px solid #f3f3f3;
-            box-sizing: border-box;
+        .floating-image {
+            filter: grayscale(100%);
+            transition: all 0.3s ease;
         }
 
-        /* Create the six sides of the cube */
-        .loader-cube .front {
-            transform: translateZ(50px);
-        }
-
-        .loader-cube .back {
-            transform: rotateY(180deg) translateZ(50px);
-        }
-
-        .loader-cube .left {
-            transform: rotateY(-90deg) translateZ(50px);
-        }
-
-        .loader-cube .right {
-            transform: rotateY(90deg) translateZ(50px);
-        }
-
-        .loader-cube .top {
-            transform: rotateX(90deg) translateZ(50px);
-        }
-
-        .loader-cube .bottom {
-            transform: rotateX(-90deg) translateZ(50px);
+        .floating-image:hover {
+            transform: scale(1.1);
+            filter: grayscale(0);
         }
 
         @keyframes rotateCube {
@@ -76,267 +111,297 @@
                 transform: rotateX(360deg) rotateY(360deg);
             }
         }
-
-        /* Hide page content until loader finishes */
-        body.loading {
-            overflow: hidden;
-        }
-
-        /* Page content styles */
-        .view-button {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 10px 15px;
-            background-color: #007BFF;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s, transform 0.3s;
-            font-weight: bold;
-        }
-
-        .view-button:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
-        }
-
-        .delete-button {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 10px 15px;
-            background-color: #dc3545;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
-            font-weight: bold;
-            border: 2px solid transparent;
-        }
-
-        .delete-button:hover {
-            background-color: #c82333;
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            border: 2px solid #fff;
-        }
-
-        .delete-button:active {
-            transform: scale(0.95);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .posts {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .post {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .landing-message {
-            text-align: center;
-            margin: 50px 0;
-            color: #fbff00;
-        }
-
-        .landing-message h2 {
-            font-size: 2em;
-            margin-bottom: 10px;
-            color: #ffffff;
-        }
-
-        .landing-message p {
-            font-size: 1.2em;
-        }
-
-        .landing-message a {
-            margin: 10px;
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: rgb(255, 255, 255);
-            text-decoration: none;
-            border-radius: 5px;
-        }
-
-        .landing-message a:hover {
-            background-color: #0056b3;
-        }
-
-        /* Floating images container */
-        .floating-images {
-            display: flex;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
-            gap: 20px;
-            flex-wrap: wrap;
-            transition: all 0.5s ease;
-        }
-
-        .floating-image {
-            width: 250px;
-            height: 250px;
-            object-fit: cover;
-            transition: transform 0.3s ease, filter 0.3s ease;
-            filter: grayscale(100%);
-            cursor: pointer;
-            will-change: transform;
-            animation: fadeIn 0.5s ease forwards;
-        }
-
-        .floating-image:hover {
-            filter: grayscale(0);
-            transform: scale(1.1);
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @media (max-width: 600px) {
-            .floating-images {
-                gap: 10px;
-                padding: 0 10px;
-            }
-
-            .floating-image {
-                width: 160px;
-                height: 160px;
-                border-radius: 10px;
-            }
-        }
     </style>
 </head>
 
-<body class="loading">
+<body class="animated-background loading min-h-screen">
     <!-- Loader -->
-    <div id="loader">
-        <div class="loader-cube">
-            <div class="front"></div>
-            <div class="back"></div>
-            <div class="left"></div>
-            <div class="right"></div>
-            <div class="top"></div>
-            <div class="bottom"></div>
+    <div id="loader"
+        class="fixed inset-0 bg-black z-50 flex items-center justify-center transition-opacity duration-300">
+        <div class="loader-cube w-24 h-24 relative">
+            <div class="absolute w-24 h-24 bg-blue-500 border-2 border-white" style="transform: translateZ(48px)"></div>
+            <div class="absolute w-24 h-24 bg-blue-500 border-2 border-white"
+                style="transform: rotateY(180deg) translateZ(48px)"></div>
+            <div class="absolute w-24 h-24 bg-blue-500 border-2 border-white"
+                style="transform: rotateY(-90deg) translateZ(48px)"></div>
+            <div class="absolute w-24 h-24 bg-blue-500 border-2 border-white"
+                style="transform: rotateY(90deg) translateZ(48px)"></div>
+            <div class="absolute w-24 h-24 bg-blue-500 border-2 border-white"
+                style="transform: rotateX(90deg) translateZ(48px)"></div>
+            <div class="absolute w-24 h-24 bg-blue-500 border-2 border-white"
+                style="transform: rotateX(-90deg) translateZ(48px)"></div>
         </div>
     </div>
 
-    <!-- Navigation Bar -->
-    <div class="navbar">
-        <a href="/">Blog</a>
-        <div class="auth-links">
-            <% if (user) { %>
-                <a href="/profile">Profile</a>
-                <a href="/About">About</a>
-                <a href="/news">Latest News</a>
-                <a href="/logout">Logout</a>
-                <% } else { %>
-                    <a href="javascript:void(0)" id="loginBtn">Login</a>
-                    <a href="javascript:void(0)" id="signupBtn">Sign Up</a>
-                    <% } %>
-        </div>
-    </div>
-
-    <!-- Main Content Container -->
-    <div class="content-container">
-        <% if (user) { %>
-            <a href="/create" class="create-post-button">Create New Post</a>
-            <h2>All Posts</h2>
-            <div class="posts">
-                <% posts.forEach(post=> { %>
-                    <div class="post">
-                        <h3><a href="/post/<%= post._id %>">
-                                <%= post.title %>
-                            </a></h3>
-                        <p>
-                            <%= post.content.slice(0, 100) %>...
-                        </p>
-                        <p><strong>Posted by:</strong>
-                            <%= post.name %>
-                        </p>
-                        <p><strong>Date:</strong>
-                            <%= new Date(post.createdAt).toLocaleString() %>
-                        </p>
-                        <a href="/post/<%= post._id %>" class="view-button">View</a>
-                        <% if (user && post.userEmail===user.email) { %>
-                            <form action="/delete/<%= post._id %>" method="POST" style="display: inline;">
-                                <button type="submit" class="delete-button">Delete</button>
-                            </form>
+    <!-- Navigation -->
+    <nav class="bg-white/90 backdrop-blur-sm shadow-lg sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/"
+                        class="text-xl font-bold text-gray-800 hover:text-blue-600 transition-colors duration-300">Blog</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <% if (user) { %>
+                        <a href="/profile"
+                            class="text-gray-600 hover:text-blue-600 transition-colors duration-300">Profile</a>
+                        <a href="/About"
+                            class="text-gray-600 hover:text-blue-600 transition-colors duration-300">About</a>
+                        <a href="/view" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">Latest
+                            News</a>
+                        <a href="/logout"
+                            class="text-gray-600 hover:text-blue-600 transition-colors duration-300">Logout</a>
+                        <% } else { %>
+                            <button id="loginBtn"
+                                class="text-gray-600 hover:text-blue-600 transition-colors duration-300">Login</button>
+                            <button id="signupBtn"
+                                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all duration-300 hover:scale-105">Sign
+                                Up</button>
                             <% } %>
-                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <% if (user) { %>
+            <div class="mb-8">
+                <a href="/create"
+                    class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transform hover:scale-105 transition-all duration-300">Create
+                    New Post</a>
+            </div>
+            <h2 class="text-3xl font-bold mb-8 text-white">All Posts</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <% posts.forEach(post=> { %>
+                    <article
+                        class="bg-white/90 backdrop-blur-sm rounded-lg shadow-xl overflow-hidden transform hover:-translate-y-1 transition-all duration-300">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-3">
+                                <a href="/post/<%= post._id %>"
+                                    class="text-gray-800 hover:text-blue-600 transition-colors duration-300">
+                                    <%= post.title %>
+                                </a>
+                            </h3>
+                            <p class="text-gray-600 mb-4">
+                                <%= post.content.slice(0, 100) %>...
+                            </p>
+                            <div class="text-sm text-gray-500 mb-4">
+                                <p><strong>Posted by:</strong>
+                                    <%= post.name %>
+                                </p>
+                                <p><strong>Date:</strong>
+                                    <%= new Date(post.createdAt).toLocaleString() %>
+                                </p>
+                            </div>
+                            <div class="flex space-x-3">
+                                <a href="/post/<%= post._id %>"
+                                    class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transform hover:scale-105 transition-all duration-300">View</a>
+                                <% if (user && post.userEmail===user.email) { %>
+                                    <form action="/delete/<%= post._id %>" method="POST" class="inline-block">
+                                        <button type="submit"
+                                            class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transform hover:scale-105 transition-all duration-300">Delete</button>
+                                    </form>
+                                    <% } %>
+                            </div>
+                        </div>
+                    </article>
                     <% }); %>
             </div>
             <% } else { %>
-                <div class="landing-message">
-                    <h2>Welcome to Our Blog Channel!</h2>
-                    <p>We invite you to share your insights, experiences, and stories with us. Whether it’s a lesson
-                        learned, a challenge overcome, or a moment of joy, your voice matters. Engage with like-minded
-                        individuals, inspire others, and be part of a supportive community.</p>
-                    <p>Please log in to view all posts and create new ones.</p>
-                </div>
-                <div class="floating-images">
-                    <% const images=['/images/image1.jpg', '/images/image2.jpg' , '/images/image3.jpg' ]; %>
-                        <% images.forEach((image, index)=> { %>
-                            <img src="<%= image %>" alt="Blog Image" class="floating-image" style="--i: <%= index %>">
-                            <% }); %>
+                <div class="text-center py-16">
+                    <h2 class="text-4xl font-bold text-white mb-6">Welcome to Our Blog Channel!</h2>
+                    <p class="text-xl text-white/90 mb-8 max-w-3xl mx-auto">
+                        We invite you to share your insights, experiences, and stories with us. Whether it's a lesson
+                        learned,
+                        a challenge overcome, or a moment of joy, your voice matters.
+                    </p>
+                    <p class="text-lg text-white/80 mb-8">Please log in to view all posts and create new ones.</p>
+                    <div class="flex flex-wrap justify-center gap-6 mt-12">
+                        <% const images=['/images/image1.jpg', '/images/image2.jpg' , '/images/image3.jpg' ]; %>
+                            <% images.forEach((image, index)=> { %>
+                                <img src="<%= image %>" alt="Blog Image"
+                                    class="w-64 h-64 object-cover rounded-lg shadow-xl floating-image animate-fade-in">
+                                <% }); %>
+                    </div>
                 </div>
                 <% } %>
-    </div>
+    </main>
 
     <!-- Footer -->
-    <footer>
-        <p>&copy; Anindya 2024 Blog Website. All Rights Reserved.</p>
+    <footer class="bg-black/30 backdrop-blur-sm text-white py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p>&copy; Anindya 2024 Blog Website. All Rights Reserved.</p>
+        </div>
     </footer>
 
     <!-- Login Modal -->
     <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close" id="loginClose">&times;</span>
-            <h2>Login</h2>
-            <form action="/login" method="POST">
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="password" placeholder="Password" required>
-                <button type="submit">Login</button>
-            </form>
-            <p>Don't have an account? <a href="#" id="openSignupModal">Sign up</a></p>
+        <div class="flex min-h-full items-center justify-center p-4">
+            <div class="modal-content bg-white rounded-lg p-8 w-full max-w-md">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Login</h2>
+                    <button class="modal-close text-gray-500 hover:text-gray-700 transition-colors duration-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <form action="/login" method="POST" class="space-y-4">
+                    <input type="email" name="email" placeholder="Email" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300">
+                    <input type="password" name="password" placeholder="Password" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300">
+                    <button type="submit"
+                        class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transform hover:scale-105 transition-all duration-300">
+                        Login
+                    </button>
+                </form>
+                <p class="mt-4 text-center text-gray-600">
+                    Don't have an account?
+                    <button class="text-blue-600 hover:text-blue-800 transition-colors duration-300"
+                        onclick="showModal('signupModal')">Sign up</button>
+                </p>
+            </div>
         </div>
     </div>
 
     <!-- Signup Modal -->
     <div id="signupModal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close" id="signupClose">&times;</span>
-            <h2>Sign Up</h2>
-            <form action="/signup" method="POST">
-                <input type="text" name="username" placeholder="Username" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="password" placeholder="Password" required>
-                <button type="submit">Sign Up</button>
-            </form>
-            <p>Already have an account? <a href="#" id="openLoginModal">Login</a></p>
+        <div class="flex min-h-full items-center justify-center p-4">
+            <div class="modal-content bg-white rounded-lg p-8 w-full max-w-md">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Sign Up</h2>
+                    <button class="modal-close text-gray-500 hover:text-gray-700 transition-colors duration-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <form action="/signup" method="POST" class="space-y-4">
+                    <input type="text" name="username" placeholder="Username" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300">
+                    <input type="email" name="email" placeholder="Email" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300">
+                    <input type="password" name="password" placeholder="Password" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300">
+                    <button type="submit"
+                        class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transform hover:scale-105 transition-all duration-300">
+                        Sign Up
+                    </button>
+                </form>
+                <p class="mt-4 text-center text-gray-600">
+                    Already have an account?
+                    <button class="text-blue-600 hover:text-blue-800 transition-colors duration-300"
+                        onclick="showModal('loginModal')">Login</button>
+                </p>
+            </div>
         </div>
     </div>
 
-    <!-- External JavaScript -->
-    <script src="/js/modal.js"></script>
     <script>
-        // Wait for the entire page to load before removing the loader
-        window.addEventListener('load', function () {
-            document.getElementById('loader').style.display = 'none';
-            document.body.classList.remove('loading');
+        // Modal functionality
+        function showModal(modalId) {
+            // Hide all modals first
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.classList.remove('active');
+            });
+            // Show the requested modal
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+                // Prevent body scrolling when modal is open
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        // Close modal functionality
+        document.querySelectorAll('.modal-close').forEach(button => {
+            button.addEventListener('click', () => {
+                const modal = button.closest('.modal');
+                if (modal) {
+                    modal.classList.remove('active');
+                    // Restore body scrolling when modal is closed
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+
+        // Close modal when clicking outside
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    // Restore body scrolling when modal is closed
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+
+        // Login button click handler
+        document.getElementById('loginBtn')?.addEventListener('click', () => {
+            showModal('loginModal');
+        });
+
+        // Signup button click handler
+        document.getElementById('signupBtn')?.addEventListener('click', () => {
+            showModal('signupModal');
+        });
+
+        // Loader functionality
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+                document.body.classList.remove('loading');
+            }, 300);
+        });
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Form validation
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', (e) => {
+                const requiredFields = form.querySelectorAll('[required]');
+                let isValid = true;
+
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        isValid = false;
+                        field.classList.add('border-red-500');
+                    } else {
+                        field.classList.remove('border-red-500');
+                    }
+                });
+
+                if (!isValid) {
+                    e.preventDefault();
+                    alert('Please fill in all required fields.');
+                }
+            });
+        });
+
+        // Add error handling for images
+        document.querySelectorAll('img').forEach(img => {
+            img.addEventListener('error', function () {
+                this.src = '/images/placeholder.jpg';
+                this.alt = 'Image not found';
+            });
         });
     </script>
 </body>
