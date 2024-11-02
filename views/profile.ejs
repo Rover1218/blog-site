@@ -4,46 +4,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Page</title>
-    <link rel="stylesheet" href="/css/profile.css">
-    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+    <title>Animated Profile Page</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+            }
+        }
+
+        body {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        .profile-header {
+            backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.9);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .user-info-card {
+            background-color: rgba(255, 255, 255, 0.8);
+            animation: fadeIn 0.8s ease-out 0.2s backwards;
+        }
+
+        .post-card {
+            background-color: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .post-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .create-post-btn {
+            animation: pulse 2s infinite;
+        }
+
+        .delete-btn {
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background-color: #EF4444;
+            color: white;
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 
-<body>
-    <div class="container">
-        <h1>Profile</h1>
+<body class="min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Profile Header -->
+        <div class="profile-header rounded-lg shadow-lg p-6 mb-8">
+            <div class="flex items-center justify-between">
+                <h1 class="text-3xl font-bold text-gray-800">Profile</h1>
+                <a href="/"
+                    class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                    ← Back to Home
+                </a>
+            </div>
 
-        <% if (user) { %>
-            <p>Username: <%= user.username %>
-            </p>
-            <p>Email: <%= user.email %>
-            </p>
-            <% } else { %>
-                <p>User not found. Please log in.</p>
-                <% } %>
+            <!-- User Info Section -->
+            <div class="mt-6">
+                <% if (user) { %>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="user-info-card p-4 rounded-lg">
+                            <p class="text-gray-600">Username</p>
+                            <p class="text-gray-900 font-medium">
+                                <%= user.username %>
+                            </p>
+                        </div>
+                        <div class="user-info-card p-4 rounded-lg">
+                            <p class="text-gray-600">Email</p>
+                            <p class="text-gray-900 font-medium">
+                                <%= user.email %>
+                            </p>
+                        </div>
+                    </div>
+                    <% } else { %>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                            <p class="text-yellow-700">User not found. Please log in.</p>
+                        </div>
+                        <% } %>
+            </div>
+        </div>
 
-                    <h2>Your Posts</h2>
-                    <% if (posts.length> 0) { %>
-                        <ul>
-                            <% posts.forEach(post=> { %>
-                                <li>
-                                    <h3>
+        <!-- Posts Section -->
+        <div class="profile-header rounded-lg shadow-lg p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Your Posts</h2>
+
+            <% if (posts.length> 0) { %>
+                <div class="space-y-6">
+                    <% posts.forEach((post, index)=> { %>
+                        <div class="post-card rounded-lg p-6 shadow-lg">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <h3 class="text-xl font-semibold text-gray-800 mb-2">
                                         <%= post.title %>
                                     </h3>
-                                    <p>
+                                    <p class="text-gray-600 mb-4">
                                         <%= post.content.substring(0, 100) %>...
                                     </p>
-                                    <form action="/delete/<%= post._id %>" method="POST">
-                                        <button type="submit">Delete</button>
-                                    </form>
-                                </li>
-                                <% }) %>
-                        </ul>
-                        <% } else { %>
-                            <p>No posts found.</p>
-                            <% } %>
-
-                                <a href="/" class="btn-home">Back to Home</a>
+                                </div>
+                                <form action="/delete/<%= post._id %>" method="POST" class="ml-4">
+                                    <button type="submit"
+                                        class="delete-btn inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <% }) %>
+                </div>
+                <% } else { %>
+                    <div class="bg-gray-50 rounded-lg p-8 text-center">
+                        <p class="text-gray-600">No posts found.</p>
+                        <a href="/new-post"
+                            class="create-post-btn inline-block mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                            Create Your First Post
+                        </a>
+                    </div>
+                    <% } %>
+        </div>
     </div>
 </body>
 

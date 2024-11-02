@@ -1,0 +1,196 @@
+@keyframes slideInFromRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInFromLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInFromTop {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes popIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes floatAnimation {
+    0% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-10px) rotate(2deg);
+    }
+
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+}
+
+/* Navigation Animations */
+.navbar {
+    animation: slideInFromTop 0.5s ease-out;
+}
+
+.navbar a {
+    position: relative;
+    transition: color 0.3s;
+}
+
+.navbar a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: #007BFF;
+    transition: width 0.3s ease;
+}
+
+.navbar a:hover::after {
+    width: 100%;
+}
+
+/* Post Animations */
+.post {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+    animation: popIn 0.5s ease forwards;
+    animation-play-state: paused;
+}
+
+.post.animate {
+    animation-play-state: running;
+}
+
+.post:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Landing Message Animation */
+.landing-message {
+    opacity: 0;
+    animation: slideInFromLeft 0.8s ease forwards;
+}
+
+.landing-message h2 {
+    animation: popIn 0.8s ease 0.3s forwards;
+}
+
+.landing-message p {
+    opacity: 0;
+    animation: slideInFromRight 0.8s ease 0.5s forwards;
+}
+
+/* Floating Images Animation */
+.floating-image {
+    animation: floatAnimation 3s ease-in-out infinite;
+}
+
+/* Button Animations */
+.view-button,
+.delete-button {
+    position: relative;
+    overflow: hidden;
+}
+
+.view-button::before,
+.delete-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.view-button:hover::before,
+.delete-button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Modal Animations */
+.modal {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal.show {
+    opacity: 1;
+}
+
+.modal-content {
+    transform: scale(0.7);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.modal.show .modal-content {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* Create Post Button Animation */
+.create-post-button {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.create-post-button::after {
+    content: '✏️';
+    position: absolute;
+    right: -20px;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.create-post-button:hover::after {
+    right: 10px;
+    opacity: 1;
+}
+
+.create-post-button:hover {
+    padding-right: 40px;
+}

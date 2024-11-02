@@ -5,116 +5,425 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Blog Post</title>
-    <link rel="stylesheet" href="/css/form.css">
-    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
     <style>
-        /* Optional: Add some styles for the back button */
-        .back-button {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 15px;
-            background-color: #007BFF;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
         }
 
-        .back-button:hover {
-            background-color: #0056b3;
+        /* Animated Background */
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(45deg, #1a1a1a, #2c3e50, #2c3e50, #1a1a1a);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Floating Particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%
+            }
+
+            50% {
+                background-position: 100% 50%
+            }
+
+            100% {
+                background-position: 0% 50%
+            }
+        }
+
+        /* Moving Stars Effect */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: starMove 3s linear infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes starMove {
+            0% {
+                transform: translateY(0);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        /* Title Styles */
+        h1 {
+            color: #fff;
+            font-size: 2.5em;
+            text-align: center;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+            animation: titleFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes titleFloat {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Form Container */
+        form {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: formAppear 1s ease-out;
+        }
+
+        @keyframes formAppear {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 25px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: elementSlide 0.5s ease-out forwards;
+        }
+
+        @keyframes elementSlide {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         label {
-            margin-top: 15px;
             display: block;
+            color: #fff;
+            margin-bottom: 8px;
+            font-weight: 500;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         }
 
         input,
         select,
-        textarea,
-        button {
+        textarea {
             width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            background: #fff;
+            border-color: #64B5F6;
+            box-shadow: 0 0 15px rgba(100, 181, 246, 0.3);
+            outline: none;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Button Styles */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button,
+        .back-button {
+            flex: 1;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button[type="submit"] {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        button:hover,
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active,
+        .back-button:active {
+            transform: translateY(1px);
+        }
+
+        /* Optional Label Style */
+        .optional {
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-left: 5px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            form {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            input,
+            select,
+            textarea {
+                font-size: 14px;
+            }
+        }
+
+        /* Animation Delays for Form Groups */
+        .form-group:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .form-group:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .form-group:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .form-group:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .form-group:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .form-group:nth-child(6) {
+            animation-delay: 0.6s;
+        }
+
+        .form-group:nth-child(7) {
+            animation-delay: 0.7s;
+        }
+
+        .form-group:nth-child(8) {
+            animation-delay: 0.8s;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
             border-radius: 5px;
         }
 
-        button {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        .optional {
-            font-size: 0.9em;
-            color: #888;
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
         }
     </style>
 </head>
 
 <body>
+    <div class="stars"></div>
     <h1>Create New Post</h1>
     <form action="/create" method="POST">
-        <label for="title">Title:*</label>
-        <input type="text" name="title" placeholder="Enter Title here" required>
+        <div class="form-group">
+            <label for="title">Title <span class="text-red-500">*</span></label>
+            <input type="text" id="title" name="title" required>
+        </div>
 
-        <label for="name">Name:*</label>
-        <input type="text" name="name" placeholder="Enter Name here" required>
+        <div class="form-group">
+            <label for="name">Author Name <span class="text-red-500">*</span></label>
+            <input type="text" id="name" name="name" required>
+        </div>
 
-        <label for="topic">Topic:*</label>
-        <select name="topic" required>
-            <option value="" disabled selected>Select a topic</option>
-            <option value="technology">Technology</option>
-            <option value="health">Health</option>
-            <option value="lifestyle">Lifestyle</option>
-            <option value="education">Education</option>
-            <option value="travel">Travel</option>
-            <option value="food">Food</option>
-            <option value="finance">Finance</option>
-            <option value="fashion">Fashion</option>
-            <option value="fitness">Fitness</option>
-            <option value="music">Music</option>
-            <option value="art">Art</option>
-            <option value="science">Science</option>
-            <option value="gaming">Gaming</option>
-            <option value="politics">Politics</option>
-            <option value="sports">Sports</option>
-            <option value="automotive">Automotive</option>
-            <option value="parenting">Parenting</option>
-            <option value="environment">Environment</option>
-            <option value="self-improvement">Self-Improvement</option>
-            <option value="history">History</option>
-            <option value="others">Others</option>
-        </select>
+        <!-- In your create.ejs -->
+        <div class="form-group">
+            <label for="topic">Topic <span class="text-red-500">*</span></label>
+            <select id="topic" name="topic" required>
+                <option value="" disabled selected>Select a topic</option>
+                <% if (typeof topics !=='undefined' && topics.length> 0) { %>
+                    <% topics.forEach(function(topic) { %>
+                        <option value="<%= topic.toLowerCase() %>">
+                            <%= topic %>
+                        </option>
+                        <% }); %>
+                            <% } else { %>
+                                <option value="" disabled selected>Select a topic</option>
+                                <option value="technology">Technology</option>
+                                <option value="health">Health</option>
+                                <option value="lifestyle">Lifestyle</option>
+                                <option value="education">Education</option>
+                                <option value="travel">Travel</option>
+                                <option value="food">Food</option>
+                                <option value="finance">Finance</option>
+                                <option value="fashion">Fashion</option>
+                                <option value="fitness">Fitness</option>
+                                <option value="music">Music</option>
+                                <option value="art">Art</option>
+                                <option value="science">Science</option>
+                                <option value="gaming">Gaming</option>
+                                <option value="politics">Politics</option>
+                                <option value="sports">Sports</option>
+                                <option value="automotive">Automotive</option>
+                                <option value="parenting">Parenting</option>
+                                <option value="environment">Environment</option>
+                                <option value="self-improvement">Self-Improvement</option>
+                                <option value="history">History</option>
+                                <option value="others">Others</option>
+                                <% } %>
+            </select>
+        </div>
 
-        <label for="content">Content:*</label>
-        <textarea name="content" placeholder="Enter Content here" required></textarea>
+        <div class="form-group">
+            <label for="content">Main Content <span class="text-red-500">*</span></label>
+            <textarea id="content" name="content" required></textarea>
+        </div>
 
-        <label for="secondParagraph">Second Paragraph (optional):</label>
-        <textarea name="secondParagraph" placeholder="Additional content for the post (optional)"></textarea>
+        <div class="form-group">
+            <label for="secondParagraph">Second Paragraph <span class="optional">(optional)</span></label>
+            <textarea id="secondParagraph" name="secondParagraph"></textarea>
+        </div>
 
-        <label for="thirdParagraph">Third Paragraph (optional):</label>
-        <textarea name="thirdParagraph" placeholder="More details about the topic (optional)"></textarea>
+        <div class="form-group">
+            <label for="thirdParagraph">Third Paragraph <span class="optional">(optional)</span></label>
+            <textarea id="thirdParagraph" name="thirdParagraph"></textarea>
+        </div>
 
-        <label for="bulletPoints">Bullet Points (optional):</label>
-        <textarea name="bulletPoints" placeholder="Separate each point with a line break (optional)"></textarea>
+        <div class="form-group">
+            <label for="bulletPoints">Key Points <span class="optional">(optional)</span></label>
+            <textarea id="bulletPoints" name="bulletPoints"></textarea>
+        </div>
 
-        <label for="summary">Summary (optional):</label>
-        <textarea name="summary" placeholder="Brief summary of the post (optional)"></textarea>
+        <div class="form-group">
+            <label for="summary">Summary <span class="optional">(optional)</span></label>
+            <textarea id="summary" name="summary"></textarea>
+        </div>
 
-        <button type="submit">Create Post</button>
+        <div class="button-group">
+            <a href="/" class="back-button">Back</a>
+            <button type="submit">Create Post</button>
+        </div>
     </form>
 
-    <!-- Back Button -->
-    <a href="/" class="back-button">Back to Home</a>
+    <script>
+        // Create animated stars
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 3}s`;
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Initialize stars
+        createStars();
+
+        // Recreate stars periodically
+        setInterval(() => {
+            const stars = document.querySelector('.stars');
+            stars.innerHTML = '';
+            createStars();
+        }, 3000);
+    </script>
 </body>
 
 </html>

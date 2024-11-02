@@ -7,58 +7,258 @@
     <title>
         <%= post.title %>
     </title>
-    <link rel="stylesheet" href="/css/posts.css">
-    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid #FFF;
+            border-bottom-color: #3B82F6;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes rotation {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        .post-container {
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        /* Dark mode toggle styles */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 34px;
+            z-index: 100;
+        }
+
+        .dark-mode-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "☀️";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+        }
+
+        input:checked+.slider {
+            background-color: #2196F3;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(26px);
+            content: "🌙";
+        }
+
+        /* Dark mode styles */
+        .dark-mode {
+            background-color: #1a1a1a;
+        }
+
+        .dark-mode .post-container {
+            background-color: #1a1a1a;
+        }
+
+        .dark-mode .main-card {
+            background-color: #2d2d2d;
+        }
+
+        .dark-mode .post-section {
+            background-color: #3d3d3d;
+        }
+
+        .dark-mode h1 {
+            color: #ffffff;
+        }
+
+        .dark-mode h2 {
+            color: #e5e5e5;
+        }
+
+        .dark-mode p {
+            color: #d1d1d1;
+        }
+
+        .dark-mode .text-gray-500 {
+            color: #a0aec0;
+        }
+
+        .dark-mode .text-gray-600 {
+            color: #e2e8f0;
+        }
+
+        .dark-mode .text-gray-700 {
+            color: #f0f4f8;
+        }
+
+        .dark-mode .text-gray-900 {
+            color: #ffffff;
+        }
+
+        .dark-mode .border-t {
+            border-color: #4a4a4a;
+        }
+
+        .dark-mode .back-button {
+            background-color: #3B82F6;
+            color: white;
+        }
+
+        .dark-mode .back-button:hover {
+            background-color: #2563EB;
+        }
+    </style>
 </head>
 
-<body
-    onload="document.querySelector('.post-container').style.opacity = 1; document.querySelector('.loader').style.display = 'none';">
+<body class="bg-gray-50 min-h-screen transition-colors duration-300">
     <div class="loader"></div>
 
-    <div class="post-container">
+    <div class="post-container max-w-4xl mx-auto px-4 py-8">
         <label class="dark-mode-toggle">
             <input type="checkbox" onchange="toggleDarkMode()">
             <span class="slider"></span>
         </label>
-        <h1>
-            <%= post.title %>
-        </h1>
-        <p><strong>Topic:</strong>
-            <%= post.topic %>
-        </p>
-        <p><strong>Content:</strong>
-            <%= post.content %>
-        </p>
-        <p>
-            <%= post.secondParagraph %>
-        </p>
-        <p>
-            <%= post.thirdParagraph %>
-        </p>
-        <p><strong>Points:</strong>
-            <%= post.bulletPoints %>
-        </p>
-        <p><strong>Summary:</strong>
-            <%= post.summary %>
-        </p>
-        <p><strong>Author:</strong>
-            <%= post.name %>
-        </p>
-        <p><strong>Email:</strong>
-            <%= post.userEmail %>
-        </p>
-        <p><strong>Created At:</strong>
-            <%= post.createdAt.toLocaleString() %>
-        </p>
-        <a href="/">Back to Home</a>
+
+        <div class="main-card bg-white rounded-lg shadow-lg p-8 mb-8 transition-colors duration-300">
+            <h1 class="text-4xl font-bold text-gray-900 mb-6 transition-colors duration-300">
+                <%= post.title %>
+            </h1>
+
+            <div class="post-section bg-gray-50 rounded-lg p-6 mb-6 transition-colors duration-300">
+                <div class="mb-4">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-2 transition-colors duration-300">Topic</h2>
+                    <p class="text-gray-600 transition-colors duration-300">
+                        <%= post.topic %>
+                    </p>
+                </div>
+
+                <div class="mb-4">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-2 transition-colors duration-300">Content</h2>
+                    <p class="text-gray-600 leading-relaxed transition-colors duration-300">
+                        <%= post.content %>
+                    </p>
+                    <p class="text-gray-600 leading-relaxed mt-4 transition-colors duration-300">
+                        <%= post.secondParagraph %>
+                    </p>
+                    <p class="text-gray-600 leading-relaxed mt-4 transition-colors duration-300">
+                        <%= post.thirdParagraph %>
+                    </p>
+                </div>
+
+                <div class="mb-4">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-2 transition-colors duration-300">Key Points</h2>
+                    <p class="text-gray-600 transition-colors duration-300">
+                        <%= post.bulletPoints %>
+                    </p>
+                </div>
+
+                <div class="mb-4">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-2 transition-colors duration-300">Summary</h2>
+                    <p class="text-gray-600 transition-colors duration-300">
+                        <%= post.summary %>
+                    </p>
+                </div>
+            </div>
+
+            <div class="border-t pt-6 transition-colors duration-300">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-sm text-gray-500 transition-colors duration-300">Author</p>
+                        <p class="text-gray-900 font-medium transition-colors duration-300">
+                            <%= post.name %>
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 transition-colors duration-300">Email</p>
+                        <p class="text-gray-900 font-medium transition-colors duration-300">
+                            <%= post.userEmail %>
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 transition-colors duration-300">Created At</p>
+                        <p class="text-gray-900 font-medium transition-colors duration-300">
+                            <%= post.createdAt.toLocaleString() %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="/"
+            class="back-button inline-flex items-center px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all duration-300">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Back to Home
+        </a>
     </div>
 
     <script>
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
             document.querySelector('.post-container').classList.toggle('dark-mode');
+            document.querySelector('.main-card').classList.toggle('dark-mode');
+            const sections = document.querySelectorAll('.post-section');
+            sections.forEach(section => section.classList.toggle('dark-mode'));
         }
+
+        window.onload = function () {
+            document.querySelector('.post-container').style.opacity = 1;
+            document.querySelector('.loader').style.display = 'none';
+        };
     </script>
 </body>
 
