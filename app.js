@@ -22,7 +22,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Serve static files (CSS, JS, images)
-app.use(express.static('public'));
+app.use(express.static('public', {
+    setHeaders: (res, path) => {
+        if (path.endsWith('.json')) {
+            // This tells browsers "this is a PWA manifest file"
+            res.setHeader('Content-Type', 'application/manifest+json');
+        }
+    }
+}));
 
 // Set EJS as the view engine
 app.set('view engine', 'ejs');
