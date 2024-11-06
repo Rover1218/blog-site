@@ -3,6 +3,9 @@ const express = require('express');
 const router = express.Router();
 const Post = require('../models/postModel');
 const User = require('../models/userModel'); // Import the User model
+const Comment = require('../models/Comment');
+const Reaction = require('../models/Reaction');
+const mongoose = require('mongoose');
 
 // Get all posts
 router.get('/', async (req, res) => {
@@ -110,6 +113,130 @@ router.post('/delete/:id', async (req, res) => {
     } catch (err) {
         console.error('Error deleting post:', err);
         res.status(500).send('Error deleting post'); // Render error message
+    }
+});
+
+// Get comments for a specific post
+router.get('/comments/:postId', async (req, res) => {
+    try {
+        const comments = await Comment.find({ postId: req.params.postId });
+        res.json(comments);
+    } catch (err) {
+        console.error('Error fetching comments:', err);
+        res.status(500).send('Error fetching comments');
+    }
+});
+
+// Add a comment to a specific post
+router.post('/comments', async (req, res) => {
+    try {
+        const { postId, text } = req.body;
+        const userEmail = req.session.userEmail;
+
+        if (!userEmail) {
+            return res.status(401).send('User not authenticated');
+        }
+
+        const user = await User.findOne({ email: userEmail });
+
+        if (!user) {
+            return res.status(401).send('User not found');
+        }
+
+        const comment = new Comment({
+            postId,
+            text,
+            userEmail: user.email,
+            userName: user.username // Ensure userName is correctly set
+        });
+
+        await comment.save();
+        res.json(comment);
+    } catch (err) {
+        console.error('Error adding comment:', err);
+        res.status(500).send('Error adding comment');
+    }
+});
+
+// Delete a comment
+router.delete('/comments/:id', async (req, res) => {
+    const commentId = req.params.id;
+    const userEmail = req.session.userEmail; // Get user email from session
+
+    try {
+        // Find the comment to check if the user is the author
+        const comment = await Comment.findById(commentId);
+        if (!comment) {
+            return res.status(404).send('Comment not found');
+        }
+        if (comment.userEmail !== userEmail) {
+            return res.status(403).send('Unauthorized to delete this comment');
+        }
+
+        // Delete the comment
+        await Comment.findByIdAndDelete(commentId);
+        res.status(200).send('Comment deleted');
+    } catch (err) {
+        console.error('Error deleting comment:', err);
+        res.status(500).send('Error deleting comment');
+    }
+});
+
+// Get reactions for a specific post
+router.get('/reactions/:postId', async (req, res) => {
+    try {
+        const reactions = await Reaction.find({ postId: req.params.postId });
+        res.json(reactions);
+    } catch (err) {
+        console.error('Error fetching reactions:', err);
+        res.status(500).send('Error fetching reactions');
+    }
+});
+
+// Add a reaction to a specific post
+router.post('/reactions', async (req, res) => {
+    try {
+        const { postId, type } = req.body;
+        const userEmail = req.session.userEmail;
+
+        if (!userEmail) {
+            return res.status(401).send('User not authenticated');
+        }
+
+        // Find any existing reaction by this user on this post
+        const existingReaction = await Reaction.findOne({ postId, userEmail });
+
+        if (existingReaction) {
+            // If the existing reaction is the same type, do nothing
+            if (existingReaction.type === type) {
+                return res.json(existingReaction);
+            }
+
+            // Otherwise, decrement the count of the existing reaction type
+            const prevReaction = await Reaction.findOne({ postId, type: existingReaction.type });
+            if (prevReaction) {
+                prevReaction.count -= 1;
+                if (prevReaction.count <= 0) {
+                    await Reaction.deleteOne({ _id: prevReaction._id });
+                } else {
+                    await prevReaction.save();
+                }
+            }
+        }
+
+        // Find or create the new reaction type
+        let reaction = await Reaction.findOne({ postId, type });
+        if (reaction) {
+            reaction.count += 1;
+        } else {
+            reaction = new Reaction({ postId, type, count: 1, userEmail });
+        }
+        await reaction.save();
+
+        res.json(reaction);
+    } catch (err) {
+        console.error('Error adding reaction:', err);
+        res.status(500).send('Error adding reaction');
     }
 });
 

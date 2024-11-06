@@ -44,6 +44,7 @@ app.get('/about', (req, res) => {
     res.render('about');
 });
 
+
 mongoose.connect(mongoURI)
     .then(() => console.log('MongoDB connected'))
     .catch(err => {

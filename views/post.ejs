@@ -162,6 +162,63 @@
         .dark-mode .back-button:hover {
             background-color: #2563EB;
         }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .animated-section {
+            opacity: 0;
+            animation: slideIn 0.8s ease-out forwards;
+        }
+
+        .reaction-button {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .reaction-button:hover {
+            transform: scale(1.2);
+        }
+
+        .reaction-count {
+            margin-left: 8px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .dark-mode .comment {
+            color: #ffffff;
+        }
+
+        .dark-mode .reaction-button {
+            color: #ffffff;
+        }
+
+        .dark-mode .reaction-count {
+            color: #ffffff;
+        }
+
+        .comment {
+            position: relative;
+        }
+
+        .delete-comment-button {
+            position: absolute;
+            right: 0;
+            top: 0;
+            cursor: pointer;
+            color: red;
+            font-size: 12px;
+        }
     </style>
 </head>
 
@@ -179,7 +236,7 @@
                 <%= post.title %>
             </h1>
 
-            <div class="post-section bg-gray-50 rounded-lg p-6 mb-6 transition-colors duration-300">
+            <div class="post-section bg-gray-50 rounded-lg p-6 mb-6 transition-colors duration-300 animated-section">
                 <div class="mb-4">
                     <h2 class="text-xl font-semibold text-gray-700 mb-2 transition-colors duration-300">Topic</h2>
                     <p class="text-gray-600 transition-colors duration-300">
@@ -215,6 +272,34 @@
                 </div>
             </div>
 
+            <!-- New Comments Section -->
+            <div class="post-section bg-gray-50 rounded-lg p-6 mb-6 transition-colors duration-300 animated-section">
+                <h2 class="text-xl font-semibold text-gray-700 mb-2 transition-colors duration-300">Comments</h2>
+                <div id="comments" class="comment">
+                    <!-- Comments will be dynamically inserted here -->
+                </div>
+                <textarea id="comment-input" class="w-full p-2 border rounded mt-4"
+                    placeholder="Add a comment..."></textarea>
+                <button onclick="addComment()" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded">Submit</button>
+            </div>
+
+            <!-- New Reactions Section -->
+            <div class="post-section bg-gray-50 rounded-lg p-6 mb-6 transition-colors duration-300 animated-section">
+                <h2 class="text-xl font-semibold text-gray-700 mb-2 transition-colors duration-300">Reactions</h2>
+                <div class="flex space-x-4">
+                    <span class="reaction-button" onclick="react('like')">👍<span id="like-count"
+                            class="reaction-count">0</span></span>
+                    <span class="reaction-button" onclick="react('love')">❤️<span id="love-count"
+                            class="reaction-count">0</span></span>
+                    <span class="reaction-button" onclick="react('laugh')">😂<span id="laugh-count"
+                            class="reaction-count">0</span></span>
+                    <span class="reaction-button" onclick="react('surprised')">😮<span id="surprised-count"
+                            class="reaction-count">0</span></span>
+                    <span class="reaction-button" onclick="react('sad')">😢<span id="sad-count"
+                            class="reaction-count">0</span></span>
+                </div>
+            </div>
+
             <div class="border-t pt-6 transition-colors duration-300">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -247,6 +332,9 @@
     </div>
 
     <script>
+        const postId = '<%= post._id %>'; // Assuming post._id is available
+        let userReaction = null; // Track the user's current reaction
+
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
             document.querySelector('.post-container').classList.toggle('dark-mode');
@@ -255,9 +343,95 @@
             sections.forEach(section => section.classList.toggle('dark-mode'));
         }
 
+        async function addComment() {
+            const commentInput = document.getElementById('comment-input');
+            const commentText = commentInput.value;
+            if (commentText.trim()) {
+                const response = await fetch('/comments', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ postId, text: commentText })
+                });
+                const comment = await response.json();
+                const commentDiv = document.createElement('div');
+                commentDiv.className = 'p-2 border-b comment';
+                commentDiv.innerHTML = `<strong>${comment.userName}:</strong> ${comment.text} <span class="delete-comment-button" onclick="deleteComment('${comment._id}')">Delete</span>`;
+                document.getElementById('comments').appendChild(commentDiv);
+                commentInput.value = '';
+            }
+        }
+
+        async function deleteComment(commentId) {
+            const response = await fetch(`/comments/${commentId}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                document.getElementById(commentId).remove();
+            } else {
+                console.error('Error deleting comment');
+            }
+        }
+
+        async function react(type) {
+            const response = await fetch('/reactions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ postId, type })
+            });
+            const reaction = await response.json();
+
+            // Update the reaction counts
+            document.getElementById(`${type}-count`).textContent = reaction.count;
+
+            // If the user had a previous reaction, decrement its count
+            if (userReaction && userReaction !== type) {
+                const prevReactionCount = document.getElementById(`${userReaction}-count`);
+                prevReactionCount.textContent = parseInt(prevReactionCount.textContent) - 1;
+            }
+
+            // Update the user's current reaction
+            userReaction = type;
+        }
+
+        async function loadReactions() {
+            const response = await fetch(`/reactions/${postId}`);
+            const reactions = await response.json();
+            reactions.forEach(reaction => {
+                document.getElementById(`${reaction.type}-count`).textContent = reaction.count;
+                if (reaction.userEmail === "<%= user ? user.email : '' %>") {
+                    userReaction = reaction.type;
+                }
+            });
+        }
+
+        async function loadComments() {
+            const response = await fetch(`/comments/${postId}`);
+            const comments = await response.json();
+            comments.forEach(comment => {
+                const commentDiv = document.createElement('div');
+                commentDiv.className = 'p-2 border-b comment';
+                commentDiv.id = comment._id;
+                commentDiv.innerHTML = `<strong>${comment.userName}:</strong> ${comment.text} ${comment.userEmail === "<%= user ? user.email : '' %>" ? '<span class="delete-comment-button" onclick="deleteComment(\'' + comment._id + '\')">Delete</span>' : ''
+                    }`;
+                document.getElementById('comments').appendChild(commentDiv);
+            });
+        }
+
         window.onload = function () {
             document.querySelector('.post-container').style.opacity = 1;
             document.querySelector('.loader').style.display = 'none';
+            const animatedSections = document.querySelectorAll('.animated-section');
+            animatedSections.forEach((section, index) => {
+                setTimeout(() => {
+                    section.style.opacity = 1;
+                }, index * 200);
+            });
+            loadComments();
+            loadReactions();
         };
     </script>
 </body>
