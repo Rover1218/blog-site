@@ -126,6 +126,26 @@
             display: block;
             transform: translateX(0);
         }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        .dropdown-menu {
+            max-height: 300px;
+            /* Adjust as needed */
+            overflow-y: auto;
+            right: 0;
+            left: auto;
+            width: 100%;
+            max-width: 100%;
+        }
     </style>
 </head>
 
@@ -218,10 +238,50 @@
                     New Post</a>
             </div>
             <h2 class="text-3xl font-bold mb-8 text-white">All Posts</h2>
-            <div class="grid grid-cols-1 gap-6">
+
+            <!-- Category Section -->
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-white">Categories</h3>
+                <div class="relative inline-block text-left">
+                    <div>
+                        <button type="button"
+                            class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+                            id="menu-button" aria-expanded="false" aria-haspopup="true">
+                            Select Category
+                            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50 dropdown-menu"
+                        role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1"
+                        id="menu-items" style="display: none;">
+                        <div class="py-1" role="none">
+                            <button onclick="filterPosts('all')" class="text-gray-700 block px-4 py-2 text-sm"
+                                role="menuitem" tabindex="-1" id="menu-item-0">All</button>
+                            <% const categories=['Technology', 'Health' , 'Lifestyle' , 'Education' , 'Travel' , 'Food'
+                                , 'Finance' , 'Fashion' , 'Fitness' , 'Music' , 'Art' , 'Science' , 'Gaming'
+                                , 'Politics' , 'Sports' , 'Automotive' , 'Parenting' , 'Environment'
+                                , 'Self-Improvement' , 'History' , 'Others' ]; %>
+                                <% categories.forEach(category=> { %>
+                                    <button onclick="filterPosts('<%= category.toLowerCase() %>')"
+                                        class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1"
+                                        id="menu-item-<%= category.toLowerCase() %>">
+                                        <%= category %>
+                                    </button>
+                                    <% }); %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="posts-container" class="grid grid-cols-1 gap-6">
                 <% posts.forEach(post=> { %>
-                    <article
-                        class="bg-white/90 backdrop-blur-sm rounded-lg shadow-xl overflow-hidden transform hover:-translate-y-1 transition-all duration-300">
+                    <article data-category="<%= post.topic.toLowerCase() %>"
+                        class="post-item bg-white/90 backdrop-blur-sm rounded-lg shadow-xl overflow-hidden transform hover:-translate-y-1 transition-all duration-300">
                         <div class="p-6">
                             <h3 class="text-xl font-bold mb-3">
                                 <a href="/post/<%= post._id %>"
@@ -510,6 +570,39 @@
                     e.preventDefault(); // Prevent background scrolling on mobile
                 }
             });
+        });
+
+        // Filter posts by category
+        function filterPosts(category) {
+            const posts = document.querySelectorAll('.post-item');
+            posts.forEach(post => {
+                if (category === 'all' || post.dataset.category === category) {
+                    post.style.display = 'block';
+                } else {
+                    post.style.display = 'none';
+                }
+            });
+        }
+
+        // Show all posts by default
+        filterPosts('all');
+
+        // Dropdown menu functionality
+        const menuButton = document.getElementById('menu-button');
+        const menuItems = document.getElementById('menu-items');
+
+        menuButton?.addEventListener('click', () => {
+            const isExpanded = menuButton.getAttribute('aria-expanded') === 'true';
+            menuButton.setAttribute('aria-expanded', !isExpanded);
+            menuItems.style.display = isExpanded ? 'none' : 'block';
+        });
+
+        // Close dropdown menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!menuButton?.contains(e.target) && !menuItems?.contains(e.target)) {
+                menuButton.setAttribute('aria-expanded', 'false');
+                menuItems.style.display = 'none';
+            }
         });
     </script>
 </body>
